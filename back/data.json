@@ -1,0 +1,61 @@
+{
+  "organisation":[
+    {
+      "name": "ФОП 'Perfect city, студія дизайну та маркетингу'",
+      "adress": "79066, м. Львів, вул. Сихівська, 19",
+      "phone": "0679457450",
+      "email": "info@pustovit.com.ua"
+    }
+  ],
+  "type": [
+    {
+      "name": "Маркетинг"
+    }
+  ],
+  "course":[
+    {
+      "code": "0001",
+      "name": "Таргетолог",
+      "typeId": null,
+      "days": 20,
+      "group": 10,
+      "price": 30
+    }
+  ],
+  "teacher":[
+    {
+      "name": "Пустовіт Володимир Володимирович",
+      "birthday": "1983-12-19",
+      "sex": "m",
+      "education": "Кандитат економічних наук",
+      "category": "вища",
+      "courseIds": [null]
+    }
+  ],
+  "request":[
+    {
+      "organisationId": null,
+      "peopleIds": [null],
+      "confirm": false
+    }
+  ],
+  "people":[
+    {
+      "name": "Яковлєв Олександр Олександрович",
+      "post": "Головний маркетолог",
+      "courseId": null,
+      "period": {
+        "start": "2020-03-19",
+        "finish": "2020-04-29"
+      }
+    }
+  ],
+  "group":[
+    {
+      "couseId": null,
+      "teacherId": null,
+      "start": "2020-03-27",
+      "peopleIds": [null]
+    }
+  ]
+}

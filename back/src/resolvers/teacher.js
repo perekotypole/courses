@@ -2,10 +2,10 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLList,
-  GraphQLBoolean,
 } from 'graphql'
 import TeacherType from '../typeDefs/teacher'
 import Teachers from '../models/teacher'
+import Images from '../models/image'
 
 export const teachers = {
   type: new GraphQLList(TeacherType),
@@ -22,19 +22,25 @@ export const addTeacher = {
   type: TeacherType,
   args: {
     name: { type: GraphQLString },
+    birthday: { type: GraphQLString },
     sex: { type: GraphQLString },
     education: { type: GraphQLString },
     category: { type: GraphQLString },
-    courseId: {type: GraphQLList(GraphQLString)},
+    courseId: { type: GraphQLList(GraphQLString) },
+    image: { type: GraphQLString },
   },
   resolve(_parent, args) {
-    return new Teachers({
+    new Images({
+      file: args.image,
+    }).save((err_, image) => new Teachers({
       name: args.name,
+      birthday: args.birthday,
       sex: args.sex,
       education: args.education,
       category: args.category,
-      courseId: args.courseId,
-    }).save()
+      courseIds: args.courseId,
+      imageId: image.id,
+    }).save())
   },
 }
 
@@ -49,10 +55,12 @@ export const updateTeacher = {
   args: {
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    birthday: { type: GraphQLString },
     sex: { type: GraphQLString },
     education: { type: GraphQLString },
     category: { type: GraphQLString },
-    courseId: {type: GraphQLList(GraphQLString)},
+    courseId: { type: GraphQLList(GraphQLString) },
+    imageId: { type: GraphQLString },
   },
   resolve(_parent, args) {
     return Teachers.findByIdAndUpdate(
@@ -60,10 +68,12 @@ export const updateTeacher = {
       {
         $set: {
           name: args.name,
+          birthday: args.birthday,
           sex: args.sex,
           education: args.education,
           category: args.category,
           courseId: args.courseId,
+          imageId: args.imageId,
         },
       },
       { new: true },

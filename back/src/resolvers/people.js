@@ -6,6 +6,7 @@ import {
 import PeopleType from '../typeDefs/people'
 import People from '../models/people'
 
+
 export const people = {
   type: new GraphQLList(PeopleType),
   resolve: () => People.find({}),

@@ -5,11 +5,26 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "apollo": "vue-cli-service apollo:dev --generate-schema",
+    "apollo:schema:generate": "vue-cli-service apollo:schema:generate",
+    "apollo:schema:publish": "vue-cli-service apollo:schema:publish",
+    "apollo:start": "vue-cli-service apollo:start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
+    "apollo-boost": "^0.4.7",
+    "apollo-cache-inmemory": "^1.6.5",
+    "apollo-client": "^2.6.8",
+    "apollo-link": "^1.2.13",
+    "apollo-link-http": "^1.5.16",
     "core-js": "^3.6.4",
+    "graphql": "^14.6.0",
+    "graphql-type-json": "^0.2.1",
     "vue": "^2.6.11",
+    "vue-apollo": "^3.0.3",
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2"
   },
@@ -22,10 +37,13 @@
     "@vue/eslint-config-airbnb": "^5.0.2",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
+    "eslint-plugin-graphql": "^3.1.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.1.2",
+    "graphql-tag": "^2.10.3",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "vue-cli-plugin-apollo": "^0.21.3",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -40,7 +58,19 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "graphql/template-strings": [
+        "error",
+        {
+          "env": "literal",
+          "projectName": "app",
+          "schemaJsonFilepath": "node_modules/.temp/graphql/schema.json"
+        }
+      ]
+    },
+    "plugins": [
+      "graphql"
+    ]
   },
   "browserslist": [
     "> 1%",

@@ -23,16 +23,12 @@ export const addGroup = {
     courseId: { type: GraphQLString },
     teacherId: { type: GraphQLString },
     start: { type: GraphQLString },
-    peopleIds: {
-      type: GraphQLList(GraphQLString),
-    },
   },
   resolve(_parent, args) {
     return new Groups({
       courseId: args.courseId,
       teacherId: args.teacherId,
       start: args.start,
-      peopleIds: args.peopleIds,
     }).save()
   },
 }

@@ -14,7 +14,7 @@ export default {
 .app-card {
   background: var(--color-bg-light);
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 25px rgba(0, 14, 92, 0.041);
   padding: 20px 30px;
 }
 </style>

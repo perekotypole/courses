@@ -15,11 +15,14 @@ import {
   person, people, addPerson, deletePerson, updatePerson,
 } from './resolvers/people'
 import {
-  request, requests, addRequest, deleteRequest, updateRequest,
+  request, requests, addRequest, deleteRequest, updateRequest, confirmRequest,
 } from './resolvers/request'
 import {
   teacher, teachers, addTeacher, deleteTeacher, updateTeacher,
 } from './resolvers/teacher'
+import {
+  type, types,
+} from './resolvers/type'
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -35,7 +38,10 @@ export default new GraphQLSchema({
       people,
       request,
       requests,
-      teacher, teachers,
+      teacher,
+      teachers,
+      type,
+      types,
     },
   }),
   mutation: new GraphQLObjectType({
@@ -56,7 +62,10 @@ export default new GraphQLSchema({
       addRequest,
       deleteRequest,
       updateRequest,
-      addTeacher, deleteTeacher, updateTeacher,
+      addTeacher,
+      deleteTeacher,
+      updateTeacher,
+      confirmRequest,
     },
   }),
 })

@@ -8,6 +8,8 @@ import CourseType from './course'
 import Courses from '../models/course'
 import TeacherType from './teacher'
 import Teachers from '../models/teacher'
+import PeopleType from './people'
+import People from '../models/people'
 
 export default new GraphQLObjectType({
   name: 'Group',
@@ -23,9 +25,8 @@ export default new GraphQLObjectType({
     },
     start: { type: GraphQLString },
     people: {
-      type: GraphQLList(GraphQLString),
-      // type: GraphQLList(EmployeeType),
-      // resolve: () => (parent) => Employee.find({ commissionId: parent.id }),
+      type: GraphQLList(PeopleType),
+      resolve: (parent) => People.find({ _id: { $in: parent.peopleIds } }),
     },
   }),
 })

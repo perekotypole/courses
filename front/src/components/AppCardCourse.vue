@@ -2,18 +2,23 @@
   <app-card class="course">
     <div class="first">
       <div>{{termin}}</div>
+      <div>{{code}}</div>
       <div class="name">{{name}}</div>
       <div>{{type}}</div>
     </div>
     <div class="second">
       <div>
-        <div>{{date}}</div>
         <div>{{teacher}}</div>
+        <div
+          v-for="(teacher, index) in teachers"
+          :key="index">{{teacher.name}}</div>
       </div>
       <br>
       <div>
-        <div>{{places}}</div>
-        <div>{{price}}грн/особа</div>
+        <div v-if="date">{{date}}</div>
+        <div>{{places - free}} вільних {{places}} місць</div>
+        <div>{{days}} днів</div>
+        <div>{{price}} грн/особа</div>
       </div>
     </div>
   </app-card>
@@ -23,19 +28,22 @@
 import AppCard from './AppCard.vue'
 
 export default {
-  name: 'Home.vue',
+  name: 'AppCardCourse.vue',
   components: {
     AppCard,
   },
   props: {
+    code: String,
     termin: String,
     name: String,
     type: String,
-    date: String,
+    date: [String, Number],
+    days: [String, Number],
     teacher: String,
-    free: String,
-    places: String,
-    price: String,
+    teachers: Array,
+    free: [String, Number],
+    places: [String, Number],
+    price: [String, Number],
   },
 }
 </script>

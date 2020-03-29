@@ -10,7 +10,7 @@
 import AppCard from './AppCard.vue'
 
 export default {
-  name: 'Home.vue',
+  name: 'Modal.vue',
   components: {
     AppCard,
   },
@@ -28,7 +28,7 @@ export default {
   background: rgba(0, 0, 0, 0.397);
 
   .modal-content {
-    width: 50%;
+    width: fit-content;
     position: absolute;
     top: 45%;
     left: 50%;

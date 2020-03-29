@@ -1,26 +1,25 @@
 import {
   GraphQLObjectType,
   GraphQLID,
-  GraphQLString,
   GraphQLBoolean,
   GraphQLList,
 } from 'graphql'
 import OrganisationType from './organisation'
 import Organisations from '../models/organisation'
+import PeopleType from './people'
+import People from '../models/people'
 
 export default new GraphQLObjectType({
   name: 'Request',
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString },
     organisation: {
       type: OrganisationType,
       resolve: (parent) => Organisations.findById(parent.organisationId),
     },
-    peopleIds: {
-      type: GraphQLList(GraphQLString),
-      // type: GraphQLList(EmployeeType),
-      // resolve: () => (parent) => Employee.find({ commissionId: parent.id }),
+    people: {
+      type: GraphQLList(PeopleType),
+      resolve: (parent) => People.find({ _id: { $in: parent.peopleIds } }),
     },
     confirm: { type: GraphQLBoolean },
   }),

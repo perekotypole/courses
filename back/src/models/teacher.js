@@ -9,4 +9,5 @@ export default mongoose.model('Teacher', new Schema({
   education: String,
   category: String,
   courseIds: [String],
+  imageId: String,
 }))

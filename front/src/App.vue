@@ -16,6 +16,7 @@ import AppScreen from './components/AppScreen.vue'
 import AppCard from './components/AppCard.vue'
 import AppHomeLink from './components/AppHomeLink.vue'
 
+
 export default {
   name: 'App.vue',
   components: {

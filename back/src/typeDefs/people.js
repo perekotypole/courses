@@ -3,8 +3,9 @@ import {
   GraphQLID,
   GraphQLString,
 } from 'graphql'
-import CourseType from './course'
-import Courses from '../models/course'
+import GroupType from './group'
+import Groups from '../models/group'
+
 
 export default new GraphQLObjectType({
   name: 'People',
@@ -12,18 +13,9 @@ export default new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     post: { type: GraphQLString },
-    course: {
-      type: CourseType,
-      resolve: (parent) => Courses.findById(parent.courseId),
-    },
-    period: {
-      type: new GraphQLObjectType({
-        name: 'Period',
-        fields: () => ({
-          start: { type: GraphQLString },
-          finish: { type: GraphQLString },
-        }),
-      }),
+    group: {
+      type: GroupType,
+      resolve: (parent) => Groups.findById(parent.groupId),
     },
   }),
 })

@@ -9,10 +9,10 @@
     <div class = "list-group">
       <div v-for="(group) in groups"
         :key="group.id">
-        <router-link :to="`/group/${group.id}`">
+        <div v-if="soon(group.start)">
           <app-card-course
-            v-if="soon(group.start)"
             :termin="'Залишилось ' + termin(group.start) + ' днів'"
+            :id="group.id"
             :name="group.course.name"
             :type="group.course.type.name"
             :date="group.start"
@@ -20,9 +20,10 @@
             :teacher="group.teacher.name"
             :free="group.people.length"
             :places="group.course.group"
-            :price="group.course.price">
+            :price="group.course.price"
+            :router="'/group/'">
           </app-card-course>
-        </router-link>
+        </div>
       </div>
     </div>
 
@@ -30,19 +31,21 @@
     <div class = "list-group">
       <div v-for="(group, index) in groups"
         :key="index">
-        <router-link :to="`/group/${group.id}`">
+        <div v-if="active(group.start, group.course.days)">
           <app-card-course
-            v-if="active(group.start, group.course.days)"
-            :termin="'Залишилось ' + termin(group.start) + ' днів'"
+            :termin="'Залишилось ' + termin(group.start, group.course.days) + ' днів'"
+            :id="group.id"
             :name="group.course.name"
             :type="group.course.type.name"
             :date="group.start"
+            :days="group.course.days"
             :teacher="group.teacher.name"
-            :free="group.free"
-            :places="group.course.places"
-            :price="group.course.price">
+            :free="group.people.length"
+            :places="group.course.group"
+            :price="group.course.price"
+            :router="'/group/'">
           </app-card-course>
-        </router-link>
+        </div>
       </div>
     </div>
 
@@ -100,27 +103,18 @@ export default {
     }`,
   },
   methods: {
-    soon: (date) => {
-      const year = date.slice(0, 4)
-      const month = date.slice(5, 7)
-      const day = date.slice(8, 10)
-
-      return new Date(year, month - 1, day) > Date.now()
-    },
+    soon: (date) => new Date(date) > Date.now(),
     active: (date, days) => {
-      const year = date.slice(0, 4)
-      const month = date.slice(5, 7)
-      const day = date.slice(8, 10)
+      const formated = new Date(date)
 
-      return !(new Date(year, month - 1, day) > Date.now())
-      && ((new Date(year, month - 1, Number(day) + days).toString()) > Date.now())
+      return !(formated > Date.now())
+      && ((new Date(formated.setDate(formated.getDate() + days))) > Date.now())
     },
     termin: (date, days = 0) => {
-      const year = date.slice(0, 4)
-      const month = date.slice(5, 7)
-      const day = (Number(date.slice(8, 10)) + days).toString()
+      const formated = new Date(date)
 
-      return Math.ceil(Math.abs(new Date(year, month - 1, day) - Date.now()) / 86400000)
+      return Math.ceil(Math.abs(new Date(formated.setDate(formated.getDate() + days))
+      - Date.now()) / 86400000)
     },
   },
 }
@@ -134,7 +128,6 @@ export default {
 
   .list-group{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 10px;
   }
 }

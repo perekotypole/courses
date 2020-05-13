@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-t-add">
+  <div class="modal-g-update">
     <div class="close">
       <router-link to="/teachers">
         <font-awesome-icon class="fa-lg" icon="times"/>
@@ -31,7 +31,7 @@
           v-for="(course) in courses"
           :key="course.id"
           class="checkbox">
-          <input  type="checkbox" v-model="courseId" :value="course.id">
+          <input  type="checkbox" v-model="courseIds" :value="course.id">
           <span>{{course.name}}</span>
         </div>
       </div>
@@ -43,9 +43,7 @@
       :key="index">{{error}}</li>
     </ul>
     <div class="close">
-      <router-link to="/teachers">
-        <button fallback="false" @click="checkForm($event) && addCourse()">Добавити</button>
-      </router-link>
+      <button fallback="false" @click="checkForm($event) && updateTeacher()">Оновити</button>
     </div>
   </div>
 </template>
@@ -54,16 +52,19 @@
 import gql from 'graphql-tag'
 
 export default {
-  name: 'ModalTeacherAdd.vue',
-  data: () => ({
-    errors: [],
-    name: '',
-    birthday: '',
-    sex: '',
-    education: '',
-    category: '',
-    courseId: [],
-  }),
+  name: 'ModalGroupUpdate',
+  data() {
+    return {
+      errors: [],
+      routeParam: this.$route.params.id,
+      name: '',
+      birthday: '',
+      sex: '',
+      education: '',
+      category: '',
+      courseIds: [],
+    }
+  },
   apollo: {
     courses: gql`query {
       courses{
@@ -71,36 +72,64 @@ export default {
         name
       }
     }`,
+    teacher: {
+      query: gql`query ($id: ID!) {
+        teacher(id: $id){
+          name
+          birthday
+          sex
+          education
+          category
+          courseIds
+        }
+      }`,
+      variables() {
+        return {
+          id: this.routeParam,
+        }
+      },
+    },
+  },
+  created() {
+    this.name = this.teacher.name
+    this.birthday = this.teacher.birthday
+    this.sex = this.teacher.sex
+    this.education = this.teacher.education
+    this.category = this.teacher.category
+    this.courseIds = this.teacher.courseIds
   },
   methods: {
-    async addCourse() {
+    async updateTeacher() {
       this.$apollo.mutate({
         mutation: gql`mutation(
-          $name: String!,
-          $birthday: String!,
-          $sex: String,
-          $education: String,
-          $category: String,
-          $courseId: [String!],
+          $id: ID
+          $name: String
+          $birthday: String
+          $sex: String
+          $education: String
+          $category: String
+          $courseId: [String]
           ){
-            addTeacher(
-              name: $name,
-              birthday: $birthday,
-              sex: $sex,
-              education: $education,
-              category: $category,
-              courseId: $courseId,
+            updateTeacher(
+              id: $id
+              name: $name
+              birthday: $birthday
+              sex: $sex
+              education: $education
+              category: $category
+              courseId: $courseId
             ){
               id
             }
           }`,
         variables: {
+          id: this.routeParam,
           name: this.name,
           birthday: this.birthday,
           sex: this.sex,
           education: this.education,
           category: this.category,
-          courseId: this.courseId,
+          courseId: this.courseIds,
         },
       }).then((data) => {
         console.log(data)
@@ -133,7 +162,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.modal-t-add{
+.modal-g-update{
 
   .close{
     text-align: right;

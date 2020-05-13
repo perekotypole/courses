@@ -20,9 +20,31 @@ const routes = [
         meta: {
           showModal: true,
         },
+        path: '/group/success',
+        component: () => import('../views/ModalSuccess.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: '/group/error',
+        component: () => import('../views/ModalError.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'group/update/:id',
+        component: () => import('../views/groups/ModalGroupUpdate.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
         path: 'group/:id',
         component: () => import('../views/groups/ModalGroup.vue'),
       },
+
     ],
   },
   {
@@ -30,6 +52,20 @@ const routes = [
     name: 'requests',
     component: () => import('../views/requests/Requests.vue'),
     children: [
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'success',
+        component: () => import('../views/ModalSuccess.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'error',
+        component: () => import('../views/ModalError.vue'),
+      },
       {
         meta: {
           showModal: true,
@@ -51,6 +87,27 @@ const routes = [
         path: 'add',
         component: () => import('../views/teachers/ModalTeacherAdd.vue'),
       },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'success',
+        component: () => import('../views/ModalSuccess.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'error',
+        component: () => import('../views/ModalError.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'update/:id',
+        component: () => import('../views/teachers/ModalTeacherUpdate.vue'),
+      },
     ],
   },
   {
@@ -64,6 +121,27 @@ const routes = [
         },
         path: 'add',
         component: () => import('../views/courses/ModalCourseAdd.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'success',
+        component: () => import('../views/ModalSuccess.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'error',
+        component: () => import('../views/ModalError.vue'),
+      },
+      {
+        meta: {
+          showModal: true,
+        },
+        path: 'update/:id',
+        component: () => import('../views/courses/ModalCourseUpdate.vue'),
       },
     ],
   },

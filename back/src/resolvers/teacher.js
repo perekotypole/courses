@@ -60,7 +60,6 @@ export const updateTeacher = {
     education: { type: GraphQLString },
     category: { type: GraphQLString },
     courseId: { type: GraphQLList(GraphQLString) },
-    imageId: { type: GraphQLString },
   },
   resolve(_parent, args) {
     return Teachers.findByIdAndUpdate(
@@ -72,8 +71,7 @@ export const updateTeacher = {
           sex: args.sex,
           education: args.education,
           category: args.category,
-          courseId: args.courseId,
-          imageId: args.imageId,
+          courseIds: args.courseId,
         },
       },
       { new: true },

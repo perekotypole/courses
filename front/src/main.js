@@ -5,7 +5,7 @@ import VueApollo from 'vue-apollo'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
-  faTimes, faCheck, faEdit, faPlus,
+  faTimes, faCheck, faEdit, faPlus, faTrash, faSun, faMoon,
 } from '@fortawesome/free-solid-svg-icons'
 
 import App from './App.vue'
@@ -15,6 +15,9 @@ library.add(faTimes)
 library.add(faCheck)
 library.add(faEdit)
 library.add(faPlus)
+library.add(faTrash)
+library.add(faSun)
+library.add(faMoon)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

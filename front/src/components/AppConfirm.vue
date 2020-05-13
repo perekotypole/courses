@@ -1,12 +1,12 @@
 <template>
   <div>
-    <router-link to="requests" @click="confirmRequest(true)">
+    <span @click="confirmRequest(true)">
       <font-awesome-icon class="fa-lg" icon="check"/>
-    </router-link>
+    </span>
     /
-    <router-link to="requests" @click="confirmRequest(false)">
+    <span @click="confirmRequest(false)">
       <font-awesome-icon class="fa-lg" icon="times"/>
-    </router-link>
+    </span>
   </div>
 </template>
 
@@ -15,11 +15,16 @@ import gql from 'graphql-tag'
 
 export default {
   name: 'Confirm',
+  data: () => ({
+    confirm: '',
+  }),
   props: {
     id: String,
   },
   methods: {
-    async confirmRequest(conf) {
+    async confirmRequest(bool) {
+      this.confirm = bool
+      console.log('this.confirm')
       this.$apollo.mutate({
         mutation: gql`mutation(
           $id: ID
@@ -34,8 +39,14 @@ export default {
           }`,
         variables: {
           id: this.id,
-          confirm: conf,
+          confirm: this.confirm,
         },
+      }).then((data) => {
+        console.log(data)
+        this.$router.push('/requests/success')
+      }).catch((error) => {
+        console.error(error)
+        this.$router.push('/requests/error')
       })
     },
   },

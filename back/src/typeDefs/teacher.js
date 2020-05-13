@@ -18,6 +18,7 @@ export default new GraphQLObjectType({
     sex: { type: GraphQLString },
     education: { type: GraphQLString },
     category: { type: GraphQLString },
+    courseIds: { type: GraphQLList(GraphQLString)}, 
     courses: {
       type: GraphQLList(CourseType),
       resolve: (parent) => Courses.find({ _id: { $in: parent.courseIds } }),

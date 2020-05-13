@@ -13,12 +13,14 @@
         <app-card-course
           v-for="(course, index) in type.courses"
           :key="index"
+          :id="course.id"
           :name="course.name"
           :code="course.code"
           :price="course.price"
           :teachers="course.teachers"
           :places="course.group"
-          :date="course.days">
+          :date="course.days"
+          :router="'/courses/update/'">
         </app-card-course>
       </div>
     </div>
@@ -58,6 +60,7 @@ export default {
       types{
         name
         courses{
+          id
           name
           price
           teachers {

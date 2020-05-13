@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-c-add">
+  <div class="modal-g-update">
     <div class="close">
       <router-link to="/courses">
         <font-awesome-icon class="fa-lg" icon="times"/>
@@ -11,8 +11,8 @@
       <span>* Назва</span>
       <input class="input" type="text" v-model="name" placeholder="Введи назву">
       <span>* Тип</span>
-      <select class="input" type="text" placeholder="Вибери тип"
-        v-model="type" list="types">
+      <select class="input" placeholder="Вибери тип"
+        v-model="type">
         <option v-for="(type) in types"
           :key="type.id"
           :value="type.id">{{type.name}}</option>
@@ -25,14 +25,6 @@
       <span>* Людей в групі</span>
       <input class="input" type="number" v-model="people"
         placeholder="Введіть число">
-      <!-- <span>Викладачі</span>
-      <div
-        v-for="(teacher) in teachers"
-        :key="teacher.id"
-        class="checkbox">
-        <input  type="checkbox" v-model="teachersM" :value="teacher.id">
-        <span>{{teacher.name}}</span>
-      </div> -->
     </div>
     <h5>* - обов'язові поля</h5>
     <ul v-if="errors.length">
@@ -42,7 +34,7 @@
     </ul>
     <div class="close">
       <router-link to="/courses">
-        <button fallback="false" @click="checkForm($event) && addCourse()">Добавити</button>
+        <button fallback="false" @click="checkForm($event) && updateCourse()">Оновити</button>
       </router-link>
     </div>
   </div>
@@ -52,16 +44,19 @@
 import gql from 'graphql-tag'
 
 export default {
-  name: 'ModalCourseAdd.vue',
-  data: () => ({
-    errors: [],
-    code: '',
-    name: '',
-    type: '',
-    price: '',
-    days: '',
-    people: '',
-  }),
+  name: 'ModalCourseUpdate',
+  data() {
+    return {
+      errors: [],
+      routeParam: this.$route.params.id,
+      code: '',
+      name: '',
+      type: '',
+      price: '',
+      days: '',
+      people: '',
+    }
+  },
   apollo: {
     types: gql`query {
       types{
@@ -69,30 +64,61 @@ export default {
         name
       }
     }`,
+    course: {
+      query: gql`query ($id: ID!) {
+        course(id: $id){
+          type{
+            id
+            name
+          }
+          name
+          price
+          code
+          group
+          days
+        }
+      }`,
+      variables() {
+        return {
+          id: this.routeParam,
+        }
+      },
+    },
+  },
+  created() {
+    this.code = this.course.code
+    this.name = this.course.name
+    this.type = this.course.type.id
+    this.days = this.course.days
+    this.people = this.course.group
+    this.price = this.course.price
   },
   methods: {
-    async addCourse() {
+    async updateCourse() {
       this.$apollo.mutate({
         mutation: gql`mutation(
-          $code: String!,
-          $name: String!,
-          $typeId: String!,
-          $days: Int!,
-          $group: Int!,
-          $price: Float!
+          $id: ID
+          $code: String
+          $name: String
+          $typeId: String
+          $days: Int
+          $group: Int
+          $price: Float
           ){
-            addCourse(
+            updateCourse(
+              id: $id,
               code: $code,
               name: $name,
               typeId: $typeId,
               days: $days,
               group: $group,
-              price: $price
+              price: $price,
             ){
               id
             }
           }`,
         variables: {
+          id: this.routeParam,
           code: this.code,
           name: this.name,
           typeId: this.type,
@@ -142,7 +168,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.modal-c-add{
+.modal-g-update{
 
   .close{
     text-align: right;

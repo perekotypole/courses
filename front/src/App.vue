@@ -1,6 +1,11 @@
 <template>
-  <app-screen id="app">
+  <app-screen id="app" :class="{ 'dark': darkMode }">
     <app-card class="menu">
+      <font-awesome-icon v-if="!darkMode" class="fa-lg" icon="sun"
+        @click="darkMode = !darkMode"/>
+      <font-awesome-icon v-else-if="darkMode" class="fa-lg" icon="moon"
+        @click="darkMode = !darkMode"/>
+      <br><br><hr>
       <app-home-link link="home">Головна</app-home-link><hr>
       <app-home-link link="requests">Заявки</app-home-link><hr>
       <app-home-link link="teachers">Викладачі</app-home-link><hr>
@@ -24,6 +29,9 @@ export default {
     AppCard,
     AppHomeLink,
   },
+  data: () => ({
+    darkMode: false,
+  }),
 }
 </script>
 
@@ -47,6 +55,13 @@ body {
   --color-bg-light: #FFFFFF;
 
   --color-font-main: #707070;
+}
+
+.dark{
+  --color-bg-main: rgb(24, 24, 24);
+  --color-bg-light: rgb(32, 32, 32);
+
+  --color-font-main: rgb(255, 255, 255);
 }
 
 #app {

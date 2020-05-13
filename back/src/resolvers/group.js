@@ -43,22 +43,16 @@ export const updateGroup = {
   type: GroupType,
   args: {
     id: { type: GraphQLID },
-    courseId: { type: GraphQLString },
     teacherId: { type: GraphQLString },
     start: { type: GraphQLString },
-    peopleIds: {
-      type: GraphQLList(GraphQLString),
-    },
   },
   resolve(_parent, args) {
     return Groups.findByIdAndUpdate(
       args.id,
       {
         $set: {
-          courseId: args.courseId,
           teacherId: args.teacherId,
           start: args.start,
-          peopleIds: args.peopleIds,
         },
       },
       { new: true },

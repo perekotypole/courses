@@ -131,11 +131,9 @@ export default {
       let date
 
       people.forEach((person) => {
-        const year = person.group.start.slice(0, 4)
-        const month = person.group.start.slice(5, 7)
-        const day = person.group.start.slice(8, 10)
+        const formated = new Date(person.group.start)
 
-        date = new Date(year, month - 1, Math.abs(-day - person.group.course.days))
+        date = new Date(formated.setDate(formated.getDate() + person.group.course.days))
 
         if (date > max) {
           max = date

@@ -1,39 +1,25 @@
 <template>
-  <div class="modal-g-add">
+  <div class="modal-g-update">
     <div class="close">
       <router-link to="/">
         <font-awesome-icon class="fa-lg" icon="times"/>
       </router-link>
     </div>
     <div class="form">
-      <span>*Курси</span>
+      <span>*Викладач</span>
       <div>
-        <div
-          v-for="(course) in courses"
-          :key="course.id"
-          class="checkbox">
-          <input  type="radio" name="course" v-model="courseM"
-            :value="{
-              id: course.id,
-              days: course.days,
-            }">
-          <span>{{course.name}}</span>
-        </div>
-      </div>
-      <span v-if="courseM.id">*Викладачі</span>
-      <div v-if="courseM.id">
         <div
           v-for="(teacher) in teachers"
           :key="teacher.id"
           class="checkbox">
-          <input  type="radio" name="teacher" v-model="teacherId" :value="teacher.id">
+          <input type="radio" name="teacher"
+            v-model="teacherId"
+            :value="teacher.id">
           <span>{{teacher.name}}</span>
         </div>
       </div>
-      <span v-if="teacherId">* Початок</span>
-      <input v-if="teacherId" class="input" type="date" v-model="start"/>
-      <span v-if="start && courseM.id">Кінець</span>
-      <div v-if="start && courseM.id">{{finish(start, courseM.days)}}</div>
+      <span>*Початок</span>
+      <input class="input" type="date" v-model="start" @change="changeDate = true"/>
     </div>
     <h5>* - обов'язові поля</h5>
     <ul v-if="errors.length">
@@ -42,9 +28,7 @@
       :key="index">{{error}}</li>
     </ul>
     <div class="close">
-      <router-link to="/">
-        <button fallback="false" @click="checkForm($event) && addGroup()">Добавити</button>
-      </router-link>
+      <button @click="checkForm($event) && updateGroup()">Оновити</button>
     </div>
   </div>
 </template>
@@ -53,16 +37,16 @@
 import gql from 'graphql-tag'
 
 export default {
-  name: 'ModalTeacherAdd.vue',
-  data: () => ({
-    errors: [],
-    teacherId: '',
-    courseM: {
-      id: '',
-      days: '',
-    },
-    start: '',
-  }),
+  name: 'ModalGroupUpdate',
+  data() {
+    return {
+      errors: [],
+      routeParam: this.$route.params.id,
+      teacherId: '',
+      start: '',
+      changeDate: false,
+    }
+  },
   apollo: {
     courses: gql`query {
       courses{
@@ -77,17 +61,37 @@ export default {
         name
       }
     }`,
+    group: {
+      query: gql`query ($id: ID!) {
+        group(id: $id){
+          start
+          teacher{
+            id
+            name
+          }
+        }
+      }`,
+      variables() {
+        return {
+          id: this.routeParam,
+        }
+      },
+    },
+  },
+  created() {
+    this.teacherId = this.group.teacher.id
+    this.start = this.group.start
   },
   methods: {
-    async addGroup() {
+    async updateGroup() {
       this.$apollo.mutate({
         mutation: gql`mutation(
-          $courseId: String!
-          $teacherId: String!
-          $start: String!
+          $id: ID!
+          $teacherId: String!,
+          $start: String!,
           ){
-            addGroup(
-              courseId: $courseId,
+            updateGroup(
+              id: $id,
               teacherId: $teacherId,
               start: $start,
             ){
@@ -95,35 +99,30 @@ export default {
             }
           }`,
         variables: {
-          courseId: this.courseM.id,
+          id: this.routeParam,
           teacherId: this.teacherId,
           start: this.start,
         },
       }).then((data) => {
         console.log(data)
         this.$router.push('/group/success')
-        return true
       }).catch((error) => {
         console.error(error)
         this.$router.push('/group/error')
-        return true
       })
     },
-    finish: (start, days) => {
-      const formated = new Date(start)
-
-      return (new Date(formated.setDate(formated.getDate() + days))).toLocaleDateString()
-    },
     checkForm(e) {
-      if (this.teacherId && this.courseM.id && this.start) {
+      if (!this.changeDate || new Date(this.start) > Date.now()) {
+        this.errors.push('Курс вже розпочався')
+        return false
+      }
+
+      if (this.teacherId && this.start) {
         return true
       }
 
       if (!this.teacherId) {
         this.errors.push('Виберіть викладача')
-      }
-      if (!this.courseM.id) {
-        this.errors.push('Виберіть курс')
       }
       if (!this.start) {
         this.errors.push('Виберіть дату початку')
@@ -137,7 +136,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.modal-g-add{
+.modal-g-update{
 
   .close{
     text-align: right;

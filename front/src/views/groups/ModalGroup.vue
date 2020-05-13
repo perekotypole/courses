@@ -1,6 +1,12 @@
 <template>
   <div class="modal-g">
     <div id="close">
+      <router-link :to="`update/${routeParam}`">
+        <font-awesome-icon icon="edit"/>
+      </router-link>
+      <router-link to="/">
+        <font-awesome-icon @click="deleteCheck()" icon="trash"/>
+      </router-link>
       <router-link to="/">
         <font-awesome-icon class="fa-lg" icon="times"/>
       </router-link>
@@ -29,7 +35,7 @@
 import gql from 'graphql-tag'
 
 export default {
-  name: 'ModadGroup',
+  name: 'ModalGroup',
   data() {
     return {
       routeParam: this.$route.params.id,
@@ -50,6 +56,7 @@ export default {
           }
           start
           teacher{
+            id
             name
           }
           people{
@@ -64,6 +71,27 @@ export default {
       },
     },
   },
+  methods: {
+    deleteCheck() {
+      if (!this.group.people.length) this.deleteGroup()
+    },
+    async deleteGroup() {
+      this.$apollo.mutate({
+        mutation: gql`mutation(
+          $id: ID!
+          ){
+            deleteGroup(
+              id: $id,
+            ){
+              id
+            }
+          }`,
+        variables: {
+          id: this.routeParam,
+        },
+      })
+    },
+  },
 }
 </script>
 
@@ -73,6 +101,10 @@ export default {
   #close{
     text-align: right;
     margin-bottom: 20px;
+
+    .router-link-active{
+      margin-left: 20px;
+    }
   }
 
   .info{
